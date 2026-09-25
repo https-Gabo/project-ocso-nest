@@ -19,8 +19,8 @@ export class ManagersService {
     return this.managerRepository.find();
   }
 
-  findOne(id: string) {
-    const manager = this.managerRepository.findOneBy({
+  async findOne(id: string) {
+    const manager = await this.managerRepository.findOneBy({
       managerId: id,
     });
     if (!manager) throw new NotFoundException(`Manager not found`);

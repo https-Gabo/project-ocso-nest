@@ -6,6 +6,6 @@ export class Region {
   regionId: number;
   @Column("text")
   regionName: string;
-  @Column("array")
+  @Column("text", { array: true })
   regionStates: string[];
 }
