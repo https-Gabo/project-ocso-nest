@@ -1,49 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import {v4 as uuid} from 'uuid';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from './entities/product.entity';
-import { Repository } from 'typeorm';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { CreateProductDto } from "./dto/create-product.dto";
+import { UpdateProductDto } from "./dto/update-product.dto";
+import { Product } from "./entities/product.entity";
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
-    private productRepository: Repository<Product>
-  ){
-}
-
-private products : CreateProductDto[]=[
-    {
-      productId: uuid(), 
-      productName: "Sabritas normal", 
-      price: 29,
-      countSeal: 3, 
-      provider: uuid(), 
-
-    }, 
-    {
-      productId: uuid(), 
-      productName: "Coca cola normal", 
-      price: 34,
-      countSeal: 2, 
-      provider: uuid(), 
-
-    }, 
-    {
-      productId: uuid(), 
-      productName: "Jabon", 
-      price: 39,
-      countSeal: 5, 
-      provider: uuid(), 
-
-    }
-  ]
+    private productRepository: Repository<Product>,
+  ) {}
 
   create(createProductDto: CreateProductDto) {
-    const product= this.productRepository.save(createProductDto)
-    return product; 
+    const product = this.productRepository.save(createProductDto);
+    return product;
   }
 
   findAll() {
@@ -51,41 +22,41 @@ private products : CreateProductDto[]=[
   }
 
   findOne(id: string) {
-    const product = this.productRepository.findOneBy({
-      productId: id,         
-    })
-    if(!product) throw new NotFoundException()
-    return product;
-
+    return this.productRepository.findOne({
+      loadRelationIds: true,
+      relations: {
+        provider: true,
+      },
+    });
   }
 
-
-  findByProvider(id: string){
-    const productsFound= this.products.filter((product)=>product.provider === id)
-        if(!productsFound) throw new NotFoundException()
-        return productsFound; 
+  findByProvider(id: string) {
+    return this.productRepository.find({
+      where: {
+        provider: {
+          providerId: id,
+        },
+      },
+    });
   }
-
 
   async update(id: string, updateProductDto: UpdateProductDto) {
     const producToUpdate = await this.productRepository.preload({
-      productId: id, 
-      ...updateProductDto  
-    })
-    if (!producToUpdate) throw new NotFoundException()
-    this.productRepository.save(producToUpdate)
+      productId: id,
+      ...updateProductDto,
+    });
+    if (!producToUpdate) throw new NotFoundException();
+    this.productRepository.save(producToUpdate);
     return producToUpdate;
   }
 
   remove(id: string) {
-    this.findOne(id)
-    this.productRepository.delete(
-      {
-        productId: id
-      }
-    )
+    this.findOne(id);
+    this.productRepository.delete({
+      productId: id,
+    });
     return {
-      message: `Objeto con id ${id} eliminado`
-    }
+      message: `Objeto con id ${id} eliminado`,
+    };
   }
 }

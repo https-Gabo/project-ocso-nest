@@ -1,9 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
-import { EmployeesService } from './employees.service';
-import { CreateEmployeeDto } from './dto/create-employee.dto';
-import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+} from "@nestjs/common";
+import { CreateEmployeeDto } from "./dto/create-employee.dto";
+import { UpdateEmployeeDto } from "./dto/update-employee.dto";
+import { EmployeesService } from "./employees.service";
 
-@Controller('employees')
+@Controller("employees")
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
 
@@ -12,27 +21,37 @@ export class EmployeesController {
     return this.employeesService.create(createEmployeeDto);
   }
 
+  @Post("upload")
+  uploadFhoto(@Body("photoUrl") photoUrl: string) {
+    return this.employeesService.uploadPhoto(photoUrl);
+  }
+
   @Get()
   findAll() {
     return this.employeesService.findAll();
   }
 
-  @Get('/:id')
+  @Get("/:id")
   findOne(
-    @Param('id', new ParseUUIDPipe({version: '4'})) 
-    id: string) {
+    @Param("id", new ParseUUIDPipe({ version: "4" }))
+    id: string,
+  ) {
     return this.employeesService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id', new ParseUUIDPipe({version: '4'})) id: string, @Body() updateEmployeeDto: UpdateEmployeeDto) {
+  @Patch(":id")
+  update(
+    @Param("id", new ParseUUIDPipe({ version: "4" })) id: string,
+    @Body() updateEmployeeDto: UpdateEmployeeDto,
+  ) {
     return this.employeesService.update(id, updateEmployeeDto);
   }
 
-  @Delete(':id')
-  remove
-  (@Param('id', new ParseUUIDPipe({version: '4'})) 
-  id: string) {
+  @Delete(":id")
+  remove(
+    @Param("id", new ParseUUIDPipe({ version: "4" }))
+    id: string,
+  ) {
     return this.employeesService.remove(id);
   }
 }
