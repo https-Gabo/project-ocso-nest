@@ -7,7 +7,10 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import { CreateEmployeeDto } from "./dto/create-employee.dto";
 import { UpdateEmployeeDto } from "./dto/update-employee.dto";
 import { EmployeesService } from "./employees.service";
@@ -22,8 +25,9 @@ export class EmployeesController {
   }
 
   @Post("upload")
-  uploadFhoto(@Body("photoUrl") photoUrl: string) {
-    return this.employeesService.uploadPhoto(photoUrl);
+  @UseInterceptors(FileInterceptor("file"))
+  uploadFhoto(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
   }
 
   @Get()

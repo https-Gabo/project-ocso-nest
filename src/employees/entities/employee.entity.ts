@@ -9,7 +9,7 @@ export class Employee {
   @Column("text")
   lastName: string;
   @Column("text")
-  phonoNumber: string;
+  phoneNumber: string;
   @Column("text")
   email: string;
   @Column({
