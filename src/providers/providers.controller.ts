@@ -7,7 +7,11 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from "@nestjs/common";
+import { UserData } from "../auth/decorators/user.decorator";
+import { User } from "../auth/entities/user.entity";
+import { AuthGuard } from "../auth/guards/auth.guard";
 import { CreateProviderDto } from "./dto/create-provider.dto";
 import { UpdateProviderDto } from "./dto/update-provider.dto";
 import { ProvidersService } from "./providers.service";
@@ -16,13 +20,19 @@ import { ProvidersService } from "./providers.service";
 export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   create(@Body() createProviderDto: CreateProviderDto) {
     return this.providersService.create(createProviderDto);
   }
 
   @Get()
-  findAll() {
+  findAll(@UserData() user: User) {
+    if (user.userRoles.includes("Employee")) {
+      throw new NotFoundException(
+        "You don't have permission to access this resource",
+      );
+    }
     return this.providersService.findAll();
   }
 

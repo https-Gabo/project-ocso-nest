@@ -4,13 +4,14 @@ import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "./dto/create-user.dto";
+import { LoginUserDto } from "./dto/login-user.dto";
 import { User } from "./entities/user.entity";
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-    private readonly jwtService: JwtService,
+    private jwtService: JwtService,
   ) {}
 
   async registerUser(createUserDto: CreateUserDto) {
@@ -24,10 +25,10 @@ export class AuthService {
     return this.userRepository.save(user);
   }
 
-  async loginUser(createUserDto: CreateUserDto) {
+  async loginUser(loginUserDto: LoginUserDto) {
     const user = await this.userRepository.findOne({
       where: {
-        userEmail: createUserDto.userEmail,
+        userEmail: loginUserDto.userEmail,
       },
     });
 
@@ -35,22 +36,19 @@ export class AuthService {
       throw new UnauthorizedException("Invalid credentials");
     }
 
-    const isPasswordValid = await bcrypt.compare(
-      createUserDto.userPassword,
+    const match = await bcrypt.compare(
+      loginUserDto.userPassword,
       user.userPassword,
     );
 
-    if (!isPasswordValid) {
-      throw new UnauthorizedException("Invalid credentials");
-    }
+    if (!match) throw new UnauthorizedException("Invalid credentials");
 
     const payload = {
-      sub: user.userId,
-      email: user.userEmail,
+      userEmail: user.userEmail,
+      userPassword: user.userPassword,
+      userRoles: user.userRoles,
     };
-
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    const token = this.jwtService.sign(payload);
+    return { token };
   }
 }
