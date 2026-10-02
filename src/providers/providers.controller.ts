@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
 } from "@nestjs/common";
+import { ROLES } from "../auth/constans/roles.constans";
 import { Auth } from "../auth/decorators/auth.decorator";
 import { UserData } from "../auth/decorators/user.decorator";
 import { User } from "../auth/entities/user.entity";
@@ -19,11 +20,13 @@ import { ProvidersService } from "./providers.service";
 export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}
 
+  @Auth(ROLES.MANAGER)
   @Post()
   create(@Body() createProviderDto: CreateProviderDto) {
     return this.providersService.create(createProviderDto);
   }
-  @Auth("Employee")
+
+  @Auth(ROLES.EMPLOYEE, ROLES.MANAGER)
   @Get()
   findAll(@UserData() user: User) {
     if (user.userRoles.includes("Employee")) {
@@ -34,11 +37,13 @@ export class ProvidersController {
     return this.providersService.findAll();
   }
 
+  @Auth(ROLES.EMPLOYEE, ROLES.MANAGER)
   @Get("name/:name")
   findbyName(@Param("name") name: string) {
     return this.providersService.findOneByName(name);
   }
 
+  @Auth(ROLES.EMPLOYEE, ROLES.MANAGER)
   @Get(":id")
   async findOne(@Param("id") id: string) {
     const provider = await this.providersService.findOne(id);
@@ -46,6 +51,7 @@ export class ProvidersController {
     return provider;
   }
 
+  @Auth(ROLES.MANAGER)
   @Patch(":id")
   update(
     @Param("id") id: string,
@@ -54,6 +60,7 @@ export class ProvidersController {
     return this.providersService.update(id, updateProviderDto);
   }
 
+  @Auth(ROLES.MANAGER)
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.providersService.remove(id);

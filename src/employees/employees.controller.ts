@@ -11,6 +11,8 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { ROLES } from "../auth/constans/roles.constans";
+import { Auth } from "../auth/decorators/auth.decorator";
 import { CreateEmployeeDto } from "./dto/create-employee.dto";
 import { UpdateEmployeeDto } from "./dto/update-employee.dto";
 import { EmployeesService } from "./employees.service";
@@ -19,22 +21,26 @@ import { EmployeesService } from "./employees.service";
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
 
+  @Auth(ROLES.MANAGER)
   @Post()
   create(@Body() createEmployeeDto: CreateEmployeeDto) {
     return this.employeesService.create(createEmployeeDto);
   }
 
+  @Auth(ROLES.MANAGER, ROLES.EMPLOYEE)
   @Post("upload")
   @UseInterceptors(FileInterceptor("file"))
   uploadFhoto(@UploadedFile() file: Express.Multer.File) {
     console.log(file);
   }
 
+  @Auth(ROLES.MANAGER)
   @Get()
   findAll() {
     return this.employeesService.findAll();
   }
 
+  @Auth(ROLES.MANAGER)
   @Get("/:id")
   findOne(
     @Param("id", new ParseUUIDPipe({ version: "4" }))
@@ -43,6 +49,7 @@ export class EmployeesController {
     return this.employeesService.findOne(id);
   }
 
+  @Auth(ROLES.EMPLOYEE)
   @Patch(":id")
   update(
     @Param("id", new ParseUUIDPipe({ version: "4" })) id: string,
@@ -51,6 +58,7 @@ export class EmployeesController {
     return this.employeesService.update(id, updateEmployeeDto);
   }
 
+  @Auth(ROLES.MANAGER)
   @Delete(":id")
   remove(
     @Param("id", new ParseUUIDPipe({ version: "4" }))
