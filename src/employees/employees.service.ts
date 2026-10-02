@@ -14,10 +14,10 @@ export class EmployeesService {
 
   async create(createEmployeeDto: CreateEmployeeDto) {
     const employee = this.employeeRepository.create({
-      employeeName: createEmployeeDto.name,
-      employeeLastName: createEmployeeDto.lastName,
-      employeePhoneNumber: createEmployeeDto.phoneNumber,
-      employeeEmail: createEmployeeDto.email,
+      employeeName: createEmployeeDto.employeeName,
+      employeeLastName: createEmployeeDto.employeeLastName,
+      employeePhoneNumber: createEmployeeDto.employeePhoneNumber,
+      employeeEmail: createEmployeeDto.employeeEmail,
     });
 
     return await this.employeeRepository.save(employee);
@@ -25,6 +25,14 @@ export class EmployeesService {
 
   async findAll() {
     return await this.employeeRepository.find();
+  }
+
+  findByLocation(id: number) {
+    return this.employeeRepository.findBy({
+      location: {
+        locationId: id,
+      },
+    });
   }
 
   async findOne(id: string) {

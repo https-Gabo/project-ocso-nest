@@ -12,16 +12,28 @@ import { Location } from "../../locations/entities/location.entity";
 export class Employee {
   @PrimaryGeneratedColumn("uuid")
   employeeId: string;
-  @Column("text")
+
+  @Column("text", {
+    nullable: true,
+  })
   employeeName: string;
-  @Column("text")
+
+  @Column("text", {
+    nullable: true,
+  })
   employeeLastName: string;
-  @Column("text")
+
+  @Column("text", {
+    nullable: true,
+  })
   employeePhoneNumber: string;
+
   @Column("text", {
     unique: true,
+    nullable: true,
   })
   employeeEmail: string;
+
   @Column({
     type: "text",
     nullable: true,

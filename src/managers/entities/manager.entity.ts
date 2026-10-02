@@ -11,15 +11,26 @@ import { Location } from "../../locations/entities/location.entity";
 export class Manager {
   @PrimaryGeneratedColumn("uuid")
   managerId: string;
-  @Column("text")
+
+  @Column("text", {
+    nullable: true,
+  })
   managerFullName: string;
-  @Column("float")
+
+  @Column("float", {
+    nullable: true,
+  })
   managerSalary: number;
+
   @Column("text", {
     unique: true,
+    nullable: true,
   })
   managerEmail: string;
-  @Column("text")
+
+  @Column("text", {
+    nullable: true,
+  })
   managerPhoneNumber: string;
 
   //Relacion con locations

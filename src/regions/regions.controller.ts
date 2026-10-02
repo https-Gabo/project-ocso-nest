@@ -8,11 +8,13 @@ import {
   Post,
 } from "@nestjs/common";
 import { ROLES } from "../auth/constans/roles.constans";
+import { ApiAuth } from "../auth/decorators/api.decorator";
 import { Auth } from "../auth/decorators/auth.decorator";
 import { CreateRegionDto } from "./dto/create-region.dto";
 import { UpdateRegionDto } from "./dto/update-region.dto";
 import { RegionsService } from "./regions.service";
 
+@ApiAuth()
 @Controller("regions")
 export class RegionsController {
   constructor(private readonly regionsService: RegionsService) {}

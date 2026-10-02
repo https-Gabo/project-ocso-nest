@@ -8,11 +8,13 @@ import {
   Post,
 } from "@nestjs/common";
 import { ROLES } from "../auth/constans/roles.constans";
+import { ApiAuth } from "../auth/decorators/api.decorator";
 import { Auth } from "../auth/decorators/auth.decorator";
 import { CreateLocationDto } from "./dto/create-location.dto";
 import { UpdateLocationDto } from "./dto/update-location.dto";
 import { LocationsService } from "./locations.service";
 
+@ApiAuth()
 @Controller("locations")
 export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}

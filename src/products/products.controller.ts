@@ -9,11 +9,13 @@ import {
   Post,
 } from "@nestjs/common";
 import { ROLES } from "../auth/constans/roles.constans";
+import { ApiAuth } from "../auth/decorators/api.decorator";
 import { Auth } from "../auth/decorators/auth.decorator";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
 import { ProductsService } from "./products.service";
 
+@ApiAuth()
 @Controller("products")
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}

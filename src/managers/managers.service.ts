@@ -12,7 +12,15 @@ export class ManagersService {
     private managerRepository: Repository<Manager>,
   ) {}
   create(createManagerDto: CreateManagerDto) {
-    return this.managerRepository.save(createManagerDto);
+    const manager = this.managerRepository.create({
+      managerFullName: createManagerDto.managerFullName,
+      managerSalary: createManagerDto.managerSalary,
+      managerEmail: createManagerDto.managerEmail,
+      managerPhoneNumber: createManagerDto.managerPhoneNumber,
+      location: createManagerDto.location,
+    });
+
+    return this.managerRepository.save(manager);
   }
 
   findAll() {

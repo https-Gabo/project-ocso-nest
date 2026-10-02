@@ -9,6 +9,7 @@ import {
   Post,
 } from "@nestjs/common";
 import { ROLES } from "../auth/constans/roles.constans";
+import { ApiAuth } from "../auth/decorators/api.decorator";
 import { Auth } from "../auth/decorators/auth.decorator";
 import { UserData } from "../auth/decorators/user.decorator";
 import { User } from "../auth/entities/user.entity";
@@ -16,6 +17,7 @@ import { CreateProviderDto } from "./dto/create-provider.dto";
 import { UpdateProviderDto } from "./dto/update-provider.dto";
 import { ProvidersService } from "./providers.service";
 
+@ApiAuth()
 @Controller("providers")
 export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}

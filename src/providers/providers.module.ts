@@ -1,21 +1,12 @@
 import { Module } from "@nestjs/common";
-import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { EXPIRES_IN, JWT_KEY } from "../auth/constans/jwt.constans";
+import { AuthModule } from "../auth/auth.module";
 import { Provider } from "./entities/provider.entity";
 import { ProvidersController } from "./providers.controller";
 import { ProvidersService } from "./providers.service";
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Provider]),
-    JwtModule.register({
-      secret: JWT_KEY,
-      signOptions: {
-        expiresIn: EXPIRES_IN,
-      },
-    }),
-  ],
+  imports: [TypeOrmModule.forFeature([Provider]), AuthModule],
   controllers: [ProvidersController],
   providers: [ProvidersService],
 })
