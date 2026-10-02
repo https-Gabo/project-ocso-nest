@@ -3,8 +3,10 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { User } from "../../auth/entities/user.entity";
 import { Location } from "../../locations/entities/location.entity";
 @Entity()
 export class Employee {
@@ -29,4 +31,10 @@ export class Employee {
     name: "locationId",
   })
   location: Location;
+
+  @OneToOne(() => User)
+  @JoinColumn({
+    name: "userId",
+  })
+  user: User;
 }
