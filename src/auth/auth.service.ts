@@ -1,10 +1,15 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
 
 @Injectable()
@@ -41,14 +46,36 @@ export class AuthService {
       user.userPassword,
     );
 
-    if (!match) throw new UnauthorizedException("Invalid credentials");
+    if (!match) {
+      throw new UnauthorizedException("Invalid credentials");
+    }
 
     const payload = {
       userEmail: user.userEmail,
-      userPassword: user.userPassword,
       userRoles: user.userRoles,
     };
+
     const token = this.jwtService.sign(payload);
     return { token };
+  }
+
+  async updateUser(userEmail: string, updateUserDto: UpdateUserDto) {
+    const newUserData = await this.userRepository.preload({
+      userEmail,
+      ...updateUserDto,
+    });
+
+    if (!newUserData) {
+      throw new NotFoundException(`User with email ${userEmail} not found`);
+    }
+
+    if (updateUserDto.userPassword) {
+      newUserData.userPassword = await bcrypt.hash(
+        updateUserDto.userPassword,
+        10,
+      );
+    }
+
+    return this.userRepository.save(newUserData);
   }
 }

@@ -13,8 +13,14 @@ export class EmployeesService {
   ) {}
 
   async create(createEmployeeDto: CreateEmployeeDto) {
-    const employee = await this.employeeRepository.save(createEmployeeDto);
-    return employee;
+    const employee = this.employeeRepository.create({
+      employeeName: createEmployeeDto.name,
+      employeeLastName: createEmployeeDto.lastName,
+      employeePhoneNumber: createEmployeeDto.phoneNumber,
+      employeeEmail: createEmployeeDto.email,
+    });
+
+    return await this.employeeRepository.save(employee);
   }
 
   async findAll() {
@@ -53,7 +59,7 @@ export class EmployeesService {
   }
   async uploadPhoto(photoUrl: string) {
     const employee = new Employee();
-    employee.photoUrl = photoUrl;
+    employee.employeePhoto = photoUrl;
     return await this.employeeRepository.save(employee);
   }
 }
