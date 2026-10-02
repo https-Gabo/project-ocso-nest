@@ -8,6 +8,10 @@ export class LoginUserDto {
   @IsString()
   @IsEmail()
   userEmail: string;
+
+  @ApiProperty({
+    default: "bkj1h32491a",
+  })
   @IsString()
   @MinLength(8)
   userPassword: string;
