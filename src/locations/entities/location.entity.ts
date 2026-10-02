@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import {
   Column,
   Entity,
@@ -15,10 +16,22 @@ import { Region } from "../../regions/entities/region.entity";
 export class Location {
   @PrimaryGeneratedColumn("increment")
   locationId: number;
+
+  @ApiProperty({
+    default: "Ocso Juriyork",
+  })
   @Column("text")
   locationName: string;
+
+  @ApiProperty({
+    default: "123 Main St",
+  })
   @Column("text")
   locationAddress: string;
+
+  @ApiProperty({
+    default: [40.7128, -74.006],
+  })
   @Column("simple-array")
   locationLatLng: number[];
 

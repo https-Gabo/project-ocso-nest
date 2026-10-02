@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
 } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import { ROLES } from "../auth/constans/roles.constans";
 import { ApiAuth } from "../auth/decorators/api.decorator";
 import { Auth } from "../auth/decorators/auth.decorator";
@@ -15,6 +16,7 @@ import { UpdateManagerDto } from "./dto/update-manager.dto";
 import { ManagersService } from "./managers.service";
 
 @ApiAuth()
+@ApiTags("Managers")
 @Controller("managers")
 export class ManagersController {
   constructor(private readonly managersService: ManagersService) {}

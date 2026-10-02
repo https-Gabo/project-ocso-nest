@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
 } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import { ROLES } from "../auth/constans/roles.constans";
 import { ApiAuth } from "../auth/decorators/api.decorator";
 import { Auth } from "../auth/decorators/auth.decorator";
@@ -18,6 +19,7 @@ import { UpdateProviderDto } from "./dto/update-provider.dto";
 import { ProvidersService } from "./providers.service";
 
 @ApiAuth()
+@ApiTags("Providers")
 @Controller("providers")
 export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}
