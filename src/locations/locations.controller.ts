@@ -9,13 +9,12 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { ROLES } from "../auth/constans/roles.constans";
-import { ApiAuth } from "../auth/decorators/api.decorator";
 import { Auth } from "../auth/decorators/auth.decorator";
 import { CreateLocationDto } from "./dto/create-location.dto";
 import { UpdateLocationDto } from "./dto/update-location.dto";
 import { LocationsService } from "./locations.service";
 
-@ApiAuth()
+//@ApiAuth()
 @ApiTags("Locations")
 @Controller("locations")
 export class LocationsController {
@@ -27,7 +26,7 @@ export class LocationsController {
     return this.locationsService.create(createLocationDto);
   }
 
-  @Auth(ROLES.MANAGER, ROLES.EMPLOYEE)
+  //@Auth(ROLES.MANAGER, ROLES.EMPLOYEE)
   @Get()
   findAll() {
     return this.locationsService.findAll();
