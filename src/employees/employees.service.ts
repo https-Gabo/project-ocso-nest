@@ -49,7 +49,7 @@ export class EmployeesService {
     const employeeToUpdate = await this.employeeRepository.preload({
       employeeId: id,
       ...updateEmployeeDto,
-    });
+    } as any);
 
     if (!employeeToUpdate) {
       throw new NotFoundException(`Employee with ID ${id} not found`);

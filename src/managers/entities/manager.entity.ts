@@ -1,3 +1,4 @@
+import type { Relation } from "typeorm";
 import {
   Column,
   Entity,
@@ -5,8 +6,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "../../auth/entities/user.entity";
-import { Location } from "../../locations/entities/location.entity";
+import type { User } from "../../auth/entities/user.entity";
+import type { Location } from "../../locations/entities/location.entity";
 @Entity()
 export class Manager {
   @PrimaryGeneratedColumn("uuid")
@@ -35,12 +36,15 @@ export class Manager {
 
   //Relacion con locations
 
-  @OneToOne(() => Location)
-  location: Location;
+  @OneToOne("Location")
+  @JoinColumn({
+    name: "locationId",
+  })
+  location: Relation<Location>;
 
-  @OneToOne(() => User)
+  @OneToOne("User")
   @JoinColumn({
     name: "userId",
   })
-  user: User;
+  user: Relation<User>;
 }

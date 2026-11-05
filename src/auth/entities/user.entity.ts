@@ -1,6 +1,7 @@
+import type { Relation } from "typeorm";
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Employee } from "../../employees/entities/employee.entity";
-import { Manager } from "../../managers/entities/manager.entity";
+import type { Employee } from "../../employees/entities/employee.entity";
+import type { Manager } from "../../managers/entities/manager.entity";
 
 @Entity("users")
 export class User {
@@ -16,10 +17,9 @@ export class User {
     default: "Employee",
   })
   userRoles: string[];
+  @OneToOne("Manager")
+  manager: Relation<Manager>;
 
-  @OneToOne(() => Manager)
-  manager: Manager;
-
-  @OneToOne(() => Employee)
-  employee: Employee;
+  @OneToOne("Employee")
+  employee: Relation<Employee>;
 }

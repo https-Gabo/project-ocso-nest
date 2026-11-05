@@ -9,5 +9,6 @@ import { ManagersService } from "./managers.service";
   imports: [TypeOrmModule.forFeature([Manager]), AuthModule],
   controllers: [ManagersController],
   providers: [ManagersService],
+  exports: [ManagersModule],
 })
 export class ManagersModule {}

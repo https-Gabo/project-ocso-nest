@@ -17,7 +17,7 @@ export class ManagersService {
       managerSalary: createManagerDto.managerSalary,
       managerEmail: createManagerDto.managerEmail,
       managerPhoneNumber: createManagerDto.managerPhoneNumber,
-      location: createManagerDto.location,
+      location: createManagerDto.location as any,
     });
 
     return this.managerRepository.save(manager);
@@ -39,7 +39,7 @@ export class ManagersService {
     const managerToUpdate = await this.managerRepository.preload({
       managerId: id,
       ...updateManagerDto,
-    });
+    } as any);
     if (!managerToUpdate) throw new NotFoundException(`Manager not found`);
     return this.managerRepository.save(managerToUpdate);
   }

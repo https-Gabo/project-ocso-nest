@@ -1,3 +1,4 @@
+import type { Relation } from "typeorm";
 import {
   Column,
   Entity,
@@ -5,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Provider } from "../../providers/entities/provider.entity";
+import type { Provider } from "../../providers/entities/provider.entity";
 
 @Entity()
 export class Product {
@@ -17,9 +18,9 @@ export class Product {
   price: number;
   @Column({ type: "int" })
   countSeal: number;
-  @ManyToOne((ea) => Provider, (provider) => provider.products)
+  @ManyToOne("Provider", "products")
   @JoinColumn({
     name: "providerId",
   })
-  provider: Provider;
+  provider: Relation<Provider>;
 }

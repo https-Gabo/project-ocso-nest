@@ -1,5 +1,6 @@
+import type { Relation } from "typeorm";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Product } from "../../products/entities/product.entity";
+import type { Product } from "../../products/entities/product.entity";
 @Entity()
 export class Provider {
   @PrimaryGeneratedColumn("uuid")
@@ -19,6 +20,6 @@ export class Provider {
   })
   providerPhoneNumber: string;
 
-  @OneToMany(() => Product, (photo) => photo.provider)
-  products: Product[];
+  @OneToMany("Product", "provider")
+  products: Relation<Product[]>;
 }

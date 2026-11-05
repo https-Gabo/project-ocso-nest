@@ -1,13 +1,19 @@
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import cookieParser from "cookie-parser";
 import { AppModule } from "./app.module";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: process.env.allowedOrigin,
+    origin: process.env.allowedOrigin
+      ? [process.env.allowedOrigin, "http://localhost:3000", "http://127.0.0.1:3000"]
+      : true,
+    credentials: true,
   });
+
+  app.use(cookieParser());
 
   const config = new DocumentBuilder()
     .setTitle("OCSO API")

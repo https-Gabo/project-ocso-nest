@@ -23,6 +23,7 @@ export class ProductsService {
 
   findOne(id: string) {
     return this.productRepository.findOne({
+      where: { productId: id },
       loadRelationIds: true,
       relations: {
         provider: true,

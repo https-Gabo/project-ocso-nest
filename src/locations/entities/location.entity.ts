@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import type { Relation } from "typeorm";
 import {
   Column,
   Entity,
@@ -8,9 +9,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Employee } from "../../employees/entities/employee.entity";
-import { Manager } from "../../managers/entities/manager.entity";
-import { Region } from "../../regions/entities/region.entity";
+import type { Employee } from "../../employees/entities/employee.entity";
+import type { Manager } from "../../managers/entities/manager.entity";
+import type { Region } from "../../regions/entities/region.entity";
 
 @Entity()
 export class Location {
@@ -35,20 +36,20 @@ export class Location {
   @Column("simple-array")
   locationLatLng: number[];
 
-  @OneToOne(() => Manager, {
+  @OneToOne("Manager", {
     eager: true,
   })
   @JoinColumn({
     name: "managerId",
   })
-  manager: Manager;
+  manager: Relation<Manager> | string;
 
-  @ManyToOne(() => Region, (region) => region.locations)
+  @ManyToOne("Region", "locations")
   @JoinColumn({
     name: "regionId",
   })
-  region: Region;
+  region: Relation<Region>;
 
-  @OneToMany(() => Employee, (employee) => employee.location)
-  employees: Employee[];
+  @OneToMany("Employee", "location")
+  employees: Relation<Employee[]>;
 }
