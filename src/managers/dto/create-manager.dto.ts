@@ -1,7 +1,6 @@
 import {
   IsEmail,
   IsNumber,
-  IsObject,
   IsOptional,
   IsString,
   MaxLength,
@@ -20,7 +19,7 @@ export class CreateManagerDto {
   @IsString()
   @MaxLength(20)
   managerPhoneNumber: string;
-  @IsObject()
+  @IsNumber()
   @IsOptional()
   location?: Partial<Location>;
 }
